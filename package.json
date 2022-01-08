@@ -22,6 +22,7 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
+    "@vonage/server-sdk": "^2.10.10",
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

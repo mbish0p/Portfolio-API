@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { google } from "googleapis";
 
 const nodemailer = require("nodemailer");
+const Vonage = require("@vonage/server-sdk");
 
 import Contact from "../models/Contact";
 
@@ -47,6 +48,34 @@ const sendConfirmMail = async (email: string, name: string) => {
   }
 };
 
+const sendSMS = async (name: string, email: string) => {
+  const vonage = new Vonage({
+    apiKey: process.env.API_KEY,
+    apiSecret: process.env.API_SECRET,
+    privateKey:
+      "/Applications/XAMPP/xamppfiles/htdocs/portfolio-api/private.key",
+    applicationId: process.env.APPLICATION_ID,
+  });
+
+  const from = "Portfolio";
+  const to = Number(process.env.ADMIN_NUMBER);
+  const text = `Someone just procces your contact form ${name}, ${email}`;
+
+  vonage.message.sendSms(from, to, text, (err: any, responseData: any) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (responseData.messages[0]["status"] === "0") {
+        console.log("Message sent successfully.");
+      } else {
+        console.log(
+          `Message failed with error: ${responseData.messages[0]["error-text"]}`
+        );
+      }
+    }
+  });
+};
+
 router.post("/", async (req: Request, res: Response) => {
   try {
     const { name, phone, email, message } = req.body;
@@ -58,11 +87,13 @@ router.post("/", async (req: Request, res: Response) => {
       message,
     });
 
-    if (contact) {
+    const savedContact = await contact.save();
+
+    if (savedContact) {
       await sendConfirmMail(email, name);
+      await sendSMS(name, email);
     }
 
-    const savedContact = await contact.save();
     res.status(200).json(savedContact);
   } catch (error: any) {
     if (error.name === "ValidationError") {
@@ -80,6 +111,12 @@ router.post("/", async (req: Request, res: Response) => {
       res.status(500).send(error);
     }
   }
+});
+
+router.get("/", (req, res) => {
+  console.log("key", process.env.PUBLIC_KEY, process.env.PRIVATE_KEY);
+
+  res.send();
 });
 
 export default router;
