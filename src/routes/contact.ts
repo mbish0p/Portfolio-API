@@ -17,15 +17,7 @@ const sendConfirmMail = async (email: string, name: string) => {
       process.env.REDIRECT_URL
     );
     oAuth2CLient.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
-
     const accesToken = await oAuth2CLient.getAccessToken();
-    console.log({
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      refreshToken: process.env.REFRESH_TOKEN,
-      host: process.env.HOST,
-      port: process.env.PORT,
-    });
 
     const transport = nodemailer.createTransport({
       host: process.env.HOST,
@@ -67,8 +59,7 @@ router.post("/", async (req: Request, res: Response) => {
     });
 
     if (contact) {
-      const result = await sendConfirmMail(email, name);
-      console.log(result);
+      await sendConfirmMail(email, name);
     }
 
     const savedContact = await contact.save();
