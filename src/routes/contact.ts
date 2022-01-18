@@ -53,7 +53,7 @@ const sendSMS = async (name: string, email: string) => {
     apiKey: process.env.API_KEY,
     apiSecret: process.env.API_SECRET,
     privateKey:
-      "/Applications/XAMPP/xamppfiles/htdocs/portfolio-api/private.key",
+      "/home/pi/Public/Sites/Portfolio-API/private.key",
     applicationId: process.env.APPLICATION_ID,
   });
 
@@ -78,6 +78,7 @@ const sendSMS = async (name: string, email: string) => {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
+    console.log('dooing')
     const { name, phone, email, message } = req.body;
     const contact = new Contact({
       _id: new mongoose.Types.ObjectId(),

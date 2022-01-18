@@ -8,7 +8,7 @@ require("./db/db");
 import contact from "./routes/contact";
 
 var corsOptions = {
-  origin: "http://localhost:3000",
+  origin: ["http://192.168.1.11/", "https://192.168.1.11/"],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
