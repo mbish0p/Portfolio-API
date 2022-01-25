@@ -11,8 +11,8 @@ var corsOptions = {
   origin: [
     "http://192.168.1.11/",
     "https://192.168.1.11/",
-    "http://www.mateuszbiskupdev.com/",
-    "https://www.mateuszbiskupdev.com/",
+    "http://www.mateuszbiskupdev.com",
+    "https://www.mateuszbiskupdev.com",
   ],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
